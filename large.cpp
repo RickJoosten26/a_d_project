@@ -49,36 +49,35 @@ bool operator<(Box a, Box b){
 
 
 
-Box smallestFitBinary(vector<Box> uBox, Box b, int boxAt){
+Box smallestFitBinary(vector<Box> unassignedBox, Box b, int boxAt){
 
 	return b; 
 }
 
 
 
-Box smallestFit(vector<Box> uBox, Box b, int boxAt){
-
+Box biggestFit(vector<Box> unassignedBox, Box b, int boxAt){
 	
 	cout << "Checking box "; 
 	b.print(); 
 	cout << endl;
 	 
 
-	if (boxAt == uBox.size()-1){
+	if (boxAt == unassignedBox.size()-1){
 		return b; 
 	}
 
-	for (int i = boxAt+1; i < uBox.size(); i++){
+	for (int i = boxAt-1; i > 0; i--){
 
 		
 		cout << "Now checking box " << i << " :";
-		uBox.at(i).print(); 
+		unassignedBox.at(i).print(); 
 		cout << endl;
 	
 
-		if (uBox.at(i) > b && uBox.at(i) != b){
+		if (unassignedBox.at(i) < b){
 			cout << "Found it!\n"; 
-			return uBox.at(i); 
+			return unassignedBox.at(i); 
 		}
 	}
 	return b; 
@@ -101,52 +100,53 @@ int main(){
 	int size;
 	cin >> size;
 
-	vector<Box> uBox; 
-	vector<Box> fBox; 
+	vector<Box> unassignedBox; 
+	vector<Box> finalBox; 
 	
 	for(int i = 0; i < size; i++){
 		double dim1, dim2, dim3;
 		cin >> dim1 >> dim2 >> dim3;
 		Box b = Box(dim1, dim2, dim3); 
-		uBox.push_back(b); 
+		unassignedBox.push_back(b); 
 
 	}
 
     //Sort 
-	sort(uBox.begin(), uBox.end());
-	vector<Box> aBox = uBox; 
+	sort(unassignedBox.begin(), unassignedBox.end());
+	vector<Box> toCheckBox = unassignedBox; 
 
 	
 	cout << endl << "Sorted vector is: \n"; 
-	printV(uBox); 
+	printV(unassignedBox); 
 	cout << endl; 
 	
 
 	int boxesStored = 0; 
 	int boxesNeeded = 0; 
 
-	int j = 0; 
+	int j = 1;  
 	
-	while (!uBox.empty() && j < uBox.size()){
+	while (!unassignedBox.empty() && j < unassignedBox.size()){
 		cout << j << endl; 
-		Box currentBox = uBox.at(j); 
-		cout << "Current box is ";
-		currentBox.print(); 
+		Box parent = unassignedBox.at(unassignedBox.size()-j); 
+		cout << "Parent box is ";
+		parent.print(); 
 		cout << endl; 
 
 
-		Box parent = smallestFit(aBox, currentBox, j);
-		if (parent != currentBox){
-			uBox.erase(remove(uBox.begin(), uBox.end(), currentBox), uBox.end()); 
-			aBox.erase(remove(aBox.begin(), aBox.end(), parent), aBox.end()); 
+		Box child = biggestFit(toCheckBox, parent, j);
+		if (child != parent){
+			unassignedBox.erase(remove(unassignedBox.begin(), unassignedBox.end(), child), unassignedBox.end()); 
+            toCheckBox.erase(remove(toCheckBox.begin(), toCheckBox.end(),child), toCheckBox.end()); 
+			toCheckBox.erase(remove(toCheckBox.begin(), toCheckBox.end(), child), toCheckBox.end()); 
 
-			parent.boxesInside.push_back(currentBox); 
-			fBox.push_back(currentBox); 
+			parent.boxesInside.push_back(child); 
+			finalBox.push_back(parent); 
 			boxesStored++; 
 			j--; 
 			
-			cout << "Parent is: "; 
-			parent.print();
+			cout << "Child is: "; 
+			child.print();
 			cout << endl; 
 			
 		}		
@@ -155,15 +155,20 @@ int main(){
 
 	
 	}
-	printV(fBox); 
+	printV(finalBox); 
 
 	cout << "\nResult is: " << size - boxesStored << endl;
 	 
-	
+	//als je dit leest trek een bak
+
+    // ik ben blind 
+    //sorry cout << handgebaar("trek") + handgebaar("een") + handgebaar("bak") << endl;
 
 
+    // "handgebaar("trek")" - vrij gay tbh vo
 
+	// infite loop got me like xD 
 
-	
+    //Hype
 	return 0;
 }
