@@ -105,6 +105,6 @@ int main(){
 			small_boxes.push_back(current_box);
 		}
 	}
-	cout << "\nResult is: " << min_amount_boxes << endl;
+	
 	return 0;
 }
