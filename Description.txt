@@ -1,0 +1,17 @@
+Our current approach uses a bipartite matching where we first put the input boxes into a vector, after which we copy that vector
+to start our algorithm. We create the graph as a vector<vector<bool>> where a value of 1 indicates that a box on the left fits indicates
+the box on the right, thus creating a vertex between them.
+
+We use a Ford-Fulkerson algorithm approach. We keep track of 2 vectors during the algorithm. A vector<int> matchR which keeps
+track which box on the left is matched to which box on the right. (So matchR.at(i) is the box on the left that fits int the i-th
+box on the right.) and a vector<bool> seen which for each box on the left keeps track whether the box on the right is already
+tried.
+
+In our main loop, we use the graph, the current considered box and the 2 vectors to create a matching where we check first 
+whether there exists a vertex between two boxes and whether it has not been considered yet for the current box. Then if this 
+box on the right is not yet matched earlier with another box or there is another box on the right in which that box that was matched
+earlier fits, we update the matching. We pass the arguments of the matching function by reference.
+
+Since we use a Ford-Fulkerson approach (and 2 main loops) we think our current runtime complexity is in O(n^2).
+
+
