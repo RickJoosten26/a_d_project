@@ -1,0 +1,18 @@
+First we create a class Box, which allows us to more easily work with the boxes and make it clearer on what we are working with. 
+
+class Box {
+	public: 
+		double dim1, dim2, dim3;
+
+		Box(double dimi1, double dimi2, double dimi3){
+			vector<double> dims = {dimi1, dimi2, dimi3}; 
+			sort(dims.begin(), dims.end()); 
+			dim1 = dims.at(2); 
+			dim2 = dims.at(1); 
+			dim3 = dims.at(0); 
+		}
+}
+
+We take the three dimensions that are given for a box, then we put those in a vector that we sort, so that dim1 will always be the biggest, 
+dim2 the second and so on. This ensures 
+

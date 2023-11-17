@@ -1,9 +1,6 @@
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <algorithm>
-#include <queue>
-#include <string.h>
 using namespace std;
 
 
@@ -39,6 +36,9 @@ class Box {
     {  
 	    return (dim1 >= obj.dim1) && (dim2 >= obj.dim2) && (dim3 >= obj.dim3); 
     } 
+	bool fits(const Box& other) const{
+		return(dim1 < other.dim1) && (dim2 < other.dim2) && (dim3 < other.dim3);
+	}
 
 };
 
@@ -47,16 +47,13 @@ bool operator<(Box a, Box b){
 }
 
 
-bool fits(Box a, Box b){
-	return(a.dim1 < b.dim1) && (a.dim2 < b.dim2) && (a.dim3 < b.dim3);
-}
 
 int size = 0;
 
 //If a matching for box b is possible, this function returns true.
 bool matching(vector<vector<bool>>& graph, int b, vector<bool>& seen, vector<int>& matchR){
-	//Try every box on the right
-	for(int v = 0; v < size; v++){
+	//Try every bigger box on the right
+	for(int v = b + 1; v < size; v++){
 		//If box b fits in box v and v has not yet been seen, then visit v
 		if(graph.at(b).at(v) && !seen.at(v)){
 			seen.at(v) = true;
@@ -89,7 +86,6 @@ int max_matching(vector<vector<bool>>& graph){
 }
 
 int main(){
-	clock_t startTime = clock();
 	//Input the size
 	cin >> size;
 	
@@ -111,15 +107,14 @@ int main(){
 	//Update the value in the graph to true if a box on the left fits in a box on the right, setting the value to true and
 	//creating a vertex between the 2 boxes.
 	for(int i = 0; i < original_boxes.size(); i++){
-		for(int j = 0; j < original_boxes.size(); j++){
-			bool canStore = fits(original_boxes.at(i), original_boxes.at(j));
-			graph.at(i).at(j) = canStore;
+		for(int j = i + 1; j < original_boxes.size(); j++){
+			if(original_boxes.at(i).fits(original_boxes.at(j))){
+				graph.at(i).at(j) = true;
+			}
 		}
 	}
 	//The max matching returns the amount of matches, so the final result is the size minus the boxed stored in another box.
 	int result = size - max_matching(graph);
 	cout << result << endl;
-	cout << double( clock() - startTime ) / (double)CLOCKS_PER_SEC<< " seconds." << endl;
-
 	return 0;
 }

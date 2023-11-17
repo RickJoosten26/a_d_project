@@ -13,7 +13,6 @@ int main(){
 	long long  n;
 	
 	for(int i = 0; i < size; i++){
-		 
 		cin >> n; 
 		result += n; 
 	}
